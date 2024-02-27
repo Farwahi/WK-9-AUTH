@@ -20,5 +20,4 @@ userRouter.get("/users/deleteAllUsers", deleteAllUsers,);
 
 userRouter.get("/users/updateUser", updateUser,);
 
-
 module.exports = userRouter;
