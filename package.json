@@ -1,24 +1,20 @@
 {
-  "name": "wk-9-auth",
+  "name": "m54week9auth",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "node server.js",
-    "client": "npm start --prefix client"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Syeda",
-  "license": "ISC",
   "keywords": [],
-  "description": "",
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "concurrently": "^8.2.2",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.4",
     "express": "^4.18.2",
-    "morgan": "^1.10.0",
-    "mysql2": "^3.9.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.9.1",
     "sequelize": "^6.37.1"
   }
 }

@@ -1,42 +1,56 @@
 const bcrypt = require("bcrypt");
+
 const User = require("../users/model");
 
-exports.hashPassword = async (req, res, next) => {
-    const saltRounds = parseInt(process.env.SALT_ROUNDS);
+const saltRounds = parseInt(process.env.SALT_ROUNDS);
 
-    try {
-        const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+const hashPass = async (req, res, next) => {
+  try {
+    console.log("req.body.password before hash: ", req.body.password);
+    const hashedPassword = await bcrypt.hash(req.body.password, saltRounds); 
 
-        req.body.password = hashedPassword;
-
-        next();
-    } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal server error", error: error.message });
-    }
+    req.body.password = hashedPassword; 
+    console.log("req.body.password after hash: ", req.body.password);
+    next();
+  } catch (error) {
+    res.status(501).json({ message: error.message, error: error });
+  }
 };
 
-exports.comparePassword = async (req, res, next) => {
-    const { password, email } = req.body;
+const comparePass = async (req, res, next) => {
+  try {
 
-    try {
-        const user = await User.findOne({
-            where: { email },
-        });
+    const user = await User.findOne({ where: { username: req.body.username } });
 
-        if (!user) {
-            return res.status(400).json({ success: false, message: "account not found." });
-        }
+    const matched = await bcrypt.compare(
+      req.body.password,
+      user.dataValues.password
+    );
 
-        const passwordMatch = await bcrypt.compare(password, user.password);
-
-        if (!passwordMatch) {
-            return res.status(401).json({ success: false, message: "invalid credentials" });
-        }
-
-        req.user = { id: user.id, email: user.email, username: user.username };
-
-        next();
-    } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    if (!matched) {
+      res.status(401).json({ message: "no!!!!!!!!!!!" });
+      return;
     }
+    req.user = user;
+    next();
+  } catch (error) {
+    res.status(501).json({ message: error.message, error: error });
+  }
+};
+
+const emailValidation = async (req, res, next) => {
+ 
+  next();
+};
+
+const passwordValdation = async (req, res, next) => {
+  
+  next();
+};
+
+module.exports = {
+  hashPass: hashPass,
+  comparePass: comparePass,
+  emailValidation: emailValidation,
+  passwordValdation: passwordValdation,
 };
